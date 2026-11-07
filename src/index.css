@@ -1,0 +1,16 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html { position: relative; scroll-behavior: smooth; }
+  body { @apply bg-paper text-ink font-sans text-[17px] leading-relaxed antialiased overflow-x-hidden; }
+  h1, h2, h3 { @apply font-display font-normal leading-[1.1] tracking-tight; }
+  :focus-visible { outline: 3px solid #d99a06; outline-offset: 3px; }
+  ::selection { background: #d99a06; color: #101c26; }
+  input, select, textarea { @apply rounded-none; }
+}
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  .animate-marquee { animation: none !important; }
+}

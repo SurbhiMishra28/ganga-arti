@@ -18,7 +18,7 @@ Connect this repository to Vercel and deploy the app directory. The Vercel rewri
 2. Add the domain in the Vercel project's **Settings → Domains** and follow the exact DNS records Vercel displays.
 3. Configure the `www` and root domain in Vercel, choose one as the primary domain, and redirect the other to it.
 4. Wait for Vercel to verify DNS and issue HTTPS before sharing the site.
-5. In Google Search Console, verify the domain, submit `/sitemap.xml`, and request indexing for the homepage and key service pages.
+5. In Google Search Console, verify the domain. After choosing the final domain, add a sitemap containing its canonical page URLs, publish it as `/sitemap.xml`, submit it in Search Console, and request indexing for the homepage and key service pages.
 
 Search position is determined by Google and cannot be guaranteed. Keep the business name, phone, address and service area consistent with the Google Business Profile, replace sample testimonials with genuine reviews, and publish a sitemap once the final domain is known.
 

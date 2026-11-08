@@ -4,7 +4,7 @@ import { motion, useInView, useScroll, useTransform, useMotionValue, useSpring }
 export const ease = [0.22, 1, 0.36, 1]
 
 /** Headline that rises word by word from behind a mask when it enters the screen. */
-export function Lines({ children, as: Tag = 'h2', className = '', delay = 0 }) {
+export function Lines({ children, as: Tag = 'h2', className = '', delay = 0, reveal = true }) {
   const ref = useRef(null)
   const seen = useInView(ref, { once: true, margin: '0px 0px -10% 0px' })
   const text = String(children)
@@ -15,8 +15,8 @@ export function Lines({ children, as: Tag = 'h2', className = '', delay = 0 }) {
           <span className="inline-block overflow-hidden pb-[.14em] -mb-[.14em] align-bottom">
             <motion.span
               className="inline-block"
-              initial={{ y: '115%' }}
-              animate={seen ? { y: 0 } : {}}
+              initial={reveal ? { y: '115%' } : false}
+              animate={reveal ? (seen ? { y: 0 } : {}) : { y: 0 }}
               transition={{ duration: 0.95, ease, delay: delay + i * 0.05 }}
             >
               {w}

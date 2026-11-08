@@ -11,11 +11,12 @@ export const H2 = ({ children, className = '' }) => <Lines className={'text-[cla
 const linkCls = 'inline-block border-b border-ink/60 pb-0.5 transition-colors duration-300 hover:border-sindoor hover:text-sindoor'
 
 /* ---------- Hero ---------- */
-// The aarti clip follows the first two photos and plays for ten seconds per pass.
+// The smallest gallery clip follows the photos to keep autoplay data-light.
+const heroVideo = videos[1]
 const slides = [
   { type: 'image', src: img.night, pos: '50% 30%', duration: 6500 },
   { type: 'image', src: img.stage, pos: '50% 35%', duration: 6500 },
-  { type: 'video', src: videos[7].src, poster: videos[7].poster, duration: 10000 },
+  { type: 'video', src: heroVideo.src, poster: heroVideo.poster, duration: 10000 },
 ]
 export function Hero() {
   const ref = useRef(null)
@@ -35,7 +36,6 @@ export function Hero() {
 
   const { scrollYProgress } = useScroll({ target: ref, offset: ['start start', 'end start'] })
   const y = useTransform(scrollYProgress, [0, 1], ['0%', '22%'])
-  const fade = useTransform(scrollYProgress, [0, 0.55], [1, 0])
   useEffect(() => {
     const timer = window.setTimeout(() => setI((current) => (current + 1) % slides.length), slides[i].duration)
     return () => window.clearTimeout(timer)
@@ -80,13 +80,13 @@ export function Hero() {
       </motion.div>
       <div className="absolute inset-0 bg-gradient-to-b from-ink/65 via-ink/15 to-ink/85" />
       <Embers />
-      <motion.div style={{ opacity: fade }} className="absolute inset-x-0 bottom-[17%]">
+      <motion.div className="absolute inset-x-0 bottom-[17%]">
         <Wrap>
-          <Lines as="h1" className="max-w-[13ch] text-[clamp(2.9rem,7.6vw,6.6rem)]" delay={0.3}>Bring the sacred light of Kashi to your wedding.</Lines>
-          <motion.p initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 1.3, duration: 1, ease }} className="mt-6 max-w-lg text-lg text-white/85">
+          <Lines as="h1" className="max-w-[13ch] text-[clamp(2.9rem,7.6vw,6.6rem)]" reveal={false}>Bring the sacred light of Kashi to your wedding.</Lines>
+          <motion.p initial={false} animate={{ opacity: 1, y: 0 }} className="mt-6 max-w-lg text-lg text-white/85">
             Wedding Ganga Aarti by acharyas and pandits from Kashi, with lamps, flowers and samagri, at your venue anywhere in India and overseas.
           </motion.p>
-          <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 1.55, duration: 1, ease }} className="mt-9 flex flex-wrap gap-4">
+          <motion.div initial={false} animate={{ opacity: 1, y: 0 }} className="mt-9 flex flex-wrap gap-4">
             <Magnetic><Link to="/book" className="block bg-sindoor px-8 py-4 text-base font-bold tracking-wide text-white transition-colors duration-300 hover:bg-white hover:text-ink">Plan your aarti</Link></Magnetic>
             <Magnetic><Link to="/gallery" className="block border border-white/60 px-8 py-4 text-base tracking-wide transition-colors duration-300 hover:border-white hover:bg-white/10">Watch the aarti</Link></Magnetic>
           </motion.div>
@@ -298,15 +298,13 @@ function Lightbox({ items, index, setIndex, close }) {
       const focusable = dialogRef.current?.querySelectorAll('button:not([disabled]), video[controls]')
       if (!focusable?.length) return
 
-      const first = focusable[0]
-      const last = focusable[focusable.length - 1]
-      if (event.shiftKey && document.activeElement === first) {
-        event.preventDefault()
-        last.focus()
-      } else if (!event.shiftKey && document.activeElement === last) {
-        event.preventDefault()
-        first.focus()
-      }
+      const elements = Array.from(focusable)
+      const currentIndex = elements.indexOf(document.activeElement)
+      const nextIndex = event.shiftKey
+        ? (currentIndex <= 0 ? elements.length - 1 : currentIndex - 1)
+        : (currentIndex < 0 || currentIndex === elements.length - 1 ? 0 : currentIndex + 1)
+      event.preventDefault()
+      elements[nextIndex].focus()
     }
 
     window.addEventListener('keydown', handleKeyDown)
@@ -364,21 +362,19 @@ export function GallerySection({ limit = false }) {
           </button>
         ))}
       </div>
-      <AnimatePresence mode="wait">
-        <motion.div key={tab} id="gallery-panel" role="tabpanel" aria-labelledby={`gallery-tab-${tab}`} tabIndex={0} initial={{ opacity: 0, y: 14 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }} transition={{ duration: 0.45, ease }} className="mt-8 grid grid-cols-2 items-start gap-3 sm:gap-4 md:grid-cols-3">
-          {items.map((it, n) => (
-            <button key={it.src} type="button" onClick={() => setOpen(n)} className="group relative block aspect-[4/5] w-full overflow-hidden bg-black text-left" aria-label={it.video ? 'Play video: ' + it.title : 'View photo: ' + it.alt}>
-              <img src={it.video ? it.poster : it.src} alt={it.video ? '' : it.alt} loading="lazy" decoding="async" className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-[1.05] motion-reduce:transition-none" />
-              {it.video && (
-                <>
-                  <span className="absolute left-1/2 top-1/2 grid h-14 w-14 -translate-x-1/2 -translate-y-1/2 place-items-center rounded-full border border-white bg-black/40 text-white transition-transform duration-300 group-hover:scale-110">▶</span>
-                  <span className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/80 to-transparent px-4 pb-3 pt-10 font-display text-lg text-white">{it.title}</span>
-                </>
-              )}
-            </button>
-          ))}
-        </motion.div>
-      </AnimatePresence>
+      <div id="gallery-panel" role="tabpanel" aria-labelledby={`gallery-tab-${tab}`} tabIndex={0} className="mt-8 grid grid-cols-2 items-start gap-3 sm:gap-4 md:grid-cols-3">
+        {items.map((it, n) => (
+          <button key={it.src} type="button" onClick={() => setOpen(n)} className="group relative block aspect-[4/5] w-full overflow-hidden bg-black text-left" aria-label={it.video ? 'Play video: ' + it.title : 'View photo: ' + it.alt}>
+            <img src={it.video ? it.poster : it.src} alt={it.video ? '' : it.alt} loading="lazy" decoding="async" className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-[1.05] motion-reduce:transition-none" />
+            {it.video && (
+              <>
+                <span className="absolute left-1/2 top-1/2 grid h-14 w-14 -translate-x-1/2 -translate-y-1/2 place-items-center rounded-full border border-white bg-black/40 text-white transition-transform duration-300 group-hover:scale-110">▶</span>
+                <span className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/80 to-transparent px-4 pb-3 pt-10 font-display text-lg text-white">{it.title}</span>
+              </>
+            )}
+          </button>
+        ))}
+      </div>
       <AnimatePresence>{open !== null && <Lightbox items={items} index={open} setIndex={setOpen} close={() => setOpen(null)} />}</AnimatePresence>
     </div>
   )

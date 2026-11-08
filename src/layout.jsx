@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { Link, NavLink, useLocation } from 'react-router-dom'
 import { AnimatePresence, motion, useScroll } from 'framer-motion'
 import { logo } from './media.js'
@@ -25,11 +25,13 @@ export function Header() {
   const [installPrompt, setInstallPrompt] = useState(null)
   const { pathname } = useLocation()
   const { scrollYProgress } = useScroll()
+  const menuRef = useRef(null)
+  const closeButtonRef = useRef(null)
   useEffect(() => {
-    const f = () => setSolid(scrollY > 50)
+    const f = () => setSolid(window.scrollY > 50)
     f()
-    addEventListener('scroll', f, { passive: true })
-    return () => removeEventListener('scroll', f)
+    window.addEventListener('scroll', f, { passive: true })
+    return () => window.removeEventListener('scroll', f)
   }, [])
   useEffect(() => setOpen(false), [pathname])
   useEffect(() => {
@@ -46,10 +48,42 @@ export function Header() {
     }
   }, [])
   useEffect(() => {
-    document.body.style.overflow = open ? 'hidden' : ''
-    const k = (e) => e.key === 'Escape' && setOpen(false)
-    addEventListener('keydown', k)
-    return () => removeEventListener('keydown', k)
+    const previousOverflow = document.body.style.overflow
+    const previousFocus = document.activeElement
+    if (open) {
+      document.body.style.overflow = 'hidden'
+      closeButtonRef.current?.focus()
+    }
+
+    const handleKeyDown = (event) => {
+      if (event.key === 'Escape') {
+        setOpen(false)
+        return
+      }
+      if (event.key !== 'Tab' || !open) return
+
+      const focusable = menuRef.current?.querySelectorAll('a[href], button:not([disabled])')
+      if (!focusable?.length) return
+
+      const first = focusable[0]
+      const last = focusable[focusable.length - 1]
+      if (event.shiftKey && document.activeElement === first) {
+        event.preventDefault()
+        last.focus()
+      } else if (!event.shiftKey && document.activeElement === last) {
+        event.preventDefault()
+        first.focus()
+      }
+    }
+
+    window.addEventListener('keydown', handleKeyDown)
+    return () => {
+      document.body.style.overflow = previousOverflow
+      window.removeEventListener('keydown', handleKeyDown)
+      if (open && previousFocus instanceof HTMLElement && previousFocus.isConnected) {
+        previousFocus.focus()
+      }
+    }
   }, [open])
 
   const installApp = async () => {
@@ -98,8 +132,9 @@ export function Header() {
           )}
           <button
               className={`grid h-11 w-11 shrink-0 place-items-center rounded-full border transition-colors duration-300 focus:outline-none focus:ring-2 focus:ring-marigold focus:ring-offset-2 lg:hidden ${solid ? 'border-ink/15 bg-paper text-ink' : 'border-white/30 bg-ink/25 text-white backdrop-blur-sm'}`}
-              aria-label="Open menu"
+              aria-label={open ? 'Menu open' : 'Open menu'}
               aria-expanded={open}
+              aria-controls="mobile-menu"
               onClick={() => setOpen(true)}
             >
               <svg width="25" height="25" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
@@ -112,6 +147,11 @@ export function Header() {
       <AnimatePresence>
         {open && (
           <motion.div
+            ref={menuRef}
+            id="mobile-menu"
+            role="dialog"
+            aria-modal="true"
+            aria-label="Site menu"
             className="fixed inset-0 z-[70] overflow-auto bg-ink px-8 pb-10 pt-24 text-white"
             initial={{ clipPath: 'circle(0% at 92% 4%)' }}
             animate={{ clipPath: 'circle(150% at 92% 4%)' }}
@@ -119,6 +159,7 @@ export function Header() {
             transition={{ duration: 0.7, ease }}
           >
             <button
+                ref={closeButtonRef}
                 className="absolute right-5 top-5 p-2 text-3xl leading-none focus:outline-none focus:ring-2 focus:ring-marigold focus:ring-offset-2 rounded-md transition-colors duration-300"
                 aria-label="Close menu"
                 onClick={() => setOpen(false)}
@@ -147,9 +188,9 @@ export function Header() {
 
 export function FloatingContact() {
   return (
-    <a href={C.wa} target="_blank" rel="noopener noreferrer" className="fixed bottom-4 right-4 z-[60] flex items-center gap-2" style={{ bottom: 'max(1rem, env(safe-area-inset-bottom))' }}>
+    <a href={C.wa} target="_blank" rel="noopener noreferrer" aria-label="Contact us on WhatsApp" className="fixed bottom-4 right-4 z-[60] flex items-center gap-2" style={{ bottom: 'max(1rem, env(safe-area-inset-bottom))' }}>
       <span className="hidden bg-white px-3 py-1.5 text-sm text-ink shadow-md sm:block">Contact us</span>
-      <span className="grid h-14 w-14 place-items-center rounded-full bg-marigold text-ink shadow-xl transition-transform duration-300 hover:scale-110" aria-label="Chat on WhatsApp">
+      <span className="grid h-14 w-14 place-items-center rounded-full bg-marigold text-ink shadow-xl transition-transform duration-300 hover:scale-110">
         <Icon d={icons.wa} size={26} />
       </span>
     </a>

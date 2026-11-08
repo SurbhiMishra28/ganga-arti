@@ -122,7 +122,9 @@ export function Marquee({ children, reverse = false, paused = false, speed = 60 
         }}
       >
         {children}
-        {children}
+        <div aria-hidden="true" className="flex gap-6">
+          {children}
+        </div>
       </div>
     </div>
   )

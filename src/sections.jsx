@@ -257,6 +257,8 @@ export function Included() {
 function Lightbox({ items, index, setIndex, close }) {
   const it = items[index]
   const videoRef = useRef(null)
+  const dialogRef = useRef(null)
+  const closeButtonRef = useRef(null)
 
   const handleClose = () => {
     if (videoRef.current) {
@@ -277,22 +279,48 @@ function Lightbox({ items, index, setIndex, close }) {
   }, [index])
 
   useEffect(() => {
+    const previousFocus = document.activeElement
+    closeButtonRef.current?.focus()
+    return () => {
+      if (previousFocus instanceof HTMLElement && previousFocus.isConnected) previousFocus.focus()
+    }
+  }, [])
+
+  useEffect(() => {
     const previousOverflow = document.body.style.overflow
     document.body.style.overflow = 'hidden'
-    const k = (e) => {
-      if (e.key === 'Escape') handleClose()
-      if (e.key === 'ArrowRight') setIndex((index + 1) % items.length)
-      if (e.key === 'ArrowLeft') setIndex((index - 1 + items.length) % items.length)
+    const handleKeyDown = (event) => {
+      if (event.key === 'Escape') handleClose()
+      if (event.key === 'ArrowRight') setIndex((index + 1) % items.length)
+      if (event.key === 'ArrowLeft') setIndex((index - 1 + items.length) % items.length)
+      if (event.key !== 'Tab') return
+
+      const focusable = dialogRef.current?.querySelectorAll('button:not([disabled]), video[controls]')
+      if (!focusable?.length) return
+
+      const first = focusable[0]
+      const last = focusable[focusable.length - 1]
+      if (event.shiftKey && document.activeElement === first) {
+        event.preventDefault()
+        last.focus()
+      } else if (!event.shiftKey && document.activeElement === last) {
+        event.preventDefault()
+        first.focus()
+      }
     }
-    addEventListener('keydown', k)
-    return () => { document.body.style.overflow = previousOverflow; removeEventListener('keydown', k) }
+
+    window.addEventListener('keydown', handleKeyDown)
+    return () => {
+      document.body.style.overflow = previousOverflow
+      window.removeEventListener('keydown', handleKeyDown)
+    }
   }, [index, items.length, setIndex])
 
   const btn = 'absolute top-1/2 -translate-y-1/2 p-4 text-4xl text-white/80 hover:text-white'
 
   return (
-    <motion.div role="dialog" aria-modal="true" aria-label="Gallery viewer" className="fixed inset-0 z-[95] flex items-center justify-center bg-black/95 p-4 md:p-12" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} onClick={(e) => e.stopPropagation()}>
-      <button className="absolute right-4 top-3 p-3 text-3xl text-white/80 hover:text-white" aria-label="Close" onClick={handleClose}>✕</button>
+    <motion.div ref={dialogRef} role="dialog" aria-modal="true" aria-label="Gallery viewer" className="fixed inset-0 z-[95] flex items-center justify-center bg-black/95 p-4 md:p-12" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} onClick={(e) => e.stopPropagation()}>
+      <button ref={closeButtonRef} className="absolute right-4 top-3 p-3 text-3xl text-white/80 hover:text-white" aria-label="Close" onClick={handleClose}>✕</button>
       <button className={btn + ' left-1'} aria-label="Previous" onClick={(e) => { e.stopPropagation(); setIndex((index - 1 + items.length) % items.length) }}>‹</button>
       <button className={btn + ' right-1'} aria-label="Next" onClick={(e) => { e.stopPropagation(); setIndex((index + 1) % items.length) }}>›</button>
       <motion.div key={index} className="flex max-h-full max-w-full flex-col items-center" initial={{ opacity: 0, scale: 0.96 }} animate={{ opacity: 1, scale: 1 }} transition={{ duration: 0.4, ease }}>

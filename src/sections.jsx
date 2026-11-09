@@ -21,7 +21,6 @@ const slides = [
 export function Hero() {
   const ref = useRef(null)
   const [i, setI] = useState(0)
-  const [loaded, setLoaded] = useState([true, true, true])
 
   useEffect(() => {
     slides.forEach((slide, idx) => {
@@ -29,7 +28,7 @@ export function Hero() {
       const image = new Image()
       image.src = slide.src
       image.onload = () => {
-        setLoaded((previous) => previous.map((isLoaded, index) => index === idx ? true : isLoaded))
+        // Image pre-loaded successfully
       }
     })
   }, [])
@@ -52,6 +51,7 @@ export function Hero() {
             <motion.video
               key={i}
               src={slides[i].src}
+              type="video/mp4"
               poster={slides[i].poster}
               autoPlay
               muted
@@ -63,7 +63,7 @@ export function Hero() {
                 if (event.currentTarget.currentTime >= 10) event.currentTarget.pause()
               }}
               initial={{ opacity: 0, scale: 1.14 }}
-              animate={{ opacity: loaded[i] ? 1 : 0, scale: loaded[i] ? 1 : 1.14 }}
+              animate={{ opacity: 1, scale: 1 }}
               exit={{ opacity: 0 }}
               transition={{ opacity: { duration: 1.6 }, scale: { duration: slides[i].duration / 1000, ease: 'easeOut' } }}
               className="absolute inset-0 h-full w-full object-cover"
@@ -74,7 +74,7 @@ export function Hero() {
               src={slides[i].src}
               alt=""
               initial={{ opacity: 0, scale: 1.14 }}
-              animate={{ opacity: loaded[i] ? 1 : 0, scale: loaded[i] ? 1 : 1.14 }}
+              animate={{ opacity: 1, scale: 1 }}
               exit={{ opacity: 0 }}
               transition={{ opacity: { duration: 1.6 }, scale: { duration: 9, ease: 'easeOut' } }}
               className="absolute inset-0 h-full w-full object-cover"
@@ -98,7 +98,8 @@ export function Hero() {
         </Wrap>
       </motion.div>
       <div className="absolute bottom-[88px] right-5 z-10 flex items-center gap-3 text-sm md:right-8" aria-hidden="true">
-        <span>0{i + 1} / 0{slides.length}</span>
+        <span className="sr-only">Slide {i + 1} of {slides.length}</span>
+        <span className="sm:not-sr-only">0{i + 1} / 0{slides.length}</span>
         {slides.map((_, n) => (
           <span key={n} className="relative h-[2px] w-10 overflow-hidden bg-white/30">
             {n === i && <motion.span className="absolute inset-0 origin-left bg-white" initial={{ scaleX: 0 }} animate={{ scaleX: 1 }} transition={{ duration: slides[i].duration / 1000, ease: 'linear' }} />}

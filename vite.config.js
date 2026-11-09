@@ -12,6 +12,25 @@ export default defineConfig({
       '@videos': path.resolve('demo_media/videos'),
     },
   },
+  // Performance optimizations
+  build: {
+    target: 'es2020',
+    cssCodeSplit: true,
+    rollupOptions: {
+      output: {
+        manualChunks: {
+          'react-vendor': ['react', 'react-dom', 'react-router-dom'],
+          'framer-motion': ['framer-motion'],
+        },
+      },
+    },
+    minify: 'esbuild',
+    chunkSizeWarningLimit: 1000,
+  },
+  // Vite config
+  optimizeDeps: {
+    include: ['react', 'react-dom', 'framer-motion'],
+  },
   // Security and PWA headers
   server: {
     headers: {

@@ -12,46 +12,48 @@ const linkCls = 'inline-block border-b border-ink/60 pb-0.5 transition-colors du
 
 /* ---------- Hero ---------- */
 // The smallest gallery clip follows the photos to keep autoplay data-light.
-const slides = [
-  { type: 'image', src: img.night, pos: '50% 30%', duration: 6500 },
-  { type: 'image', src: img.stage, pos: '50% 35%', duration: 6500 },
-  { type: 'image', src: img.hero3, pos: '50% 40%', duration: 6500 },
+const videoSlides = [
+  { type: 'video', src: 'https://cdn.skiper-ui.com/video/v1/skiper6.mp4', duration: 6500 },
+  { type: 'video', src: 'https://cdn.skiper-ui.com/video/v1/skiper18.mp4', duration: 6500 },
+  { type: 'video', src: 'https://cdn.skiper-ui.com/video/v1/skiper36.mp4', duration: 6500 },
+  { type: 'video', src: 'https://cdn.skiper-ui.com/video/v1/skiper19.mp4', duration: 6500 },
 ]
 export function Hero() {
   const ref = useRef(null)
   const [i, setI] = useState(0)
+  const videoRef = useRef(null)
 
   useEffect(() => {
-    slides.forEach((slide, idx) => {
-      if (slide.type !== 'image' || idx === 0) return
-      const image = new Image()
-      image.src = slide.src
-      image.onload = () => {
-        // Image pre-loaded successfully
-      }
-    })
-  }, [])
+    if (videoRef.current && videoSlides[i].type === 'video') {
+      videoRef.current.load()
+      videoRef.current.play().catch(() => {})
+    }
+  }, [i])
 
   const { scrollYProgress } = useScroll({ target: ref, offset: ['start start', 'end start'] })
   const y = useTransform(scrollYProgress, [0, 1], ['0%', '22%'])
   useEffect(() => {
-    const timer = window.setTimeout(() => setI((current) => (current + 1) % slides.length), slides[i].duration)
+    const timer = window.setTimeout(() => setI((current) => (current + 1) % videoSlides.length), videoSlides[i].duration)
     return () => window.clearTimeout(timer)
   }, [i])
   return (
     <section ref={ref} className="relative h-[100svh] min-h-[640px] overflow-hidden bg-ink text-white">
       <motion.div style={{ y }} className="absolute inset-x-0 -inset-y-[6%]">
-        <AnimatePresence>
-          <motion.img
+        <AnimatePresence mode="wait">
+          <motion.video
             key={i}
-            src={slides[i].src}
-            alt=""
+            ref={videoRef}
+            src={videoSlides[i].src}
+            autoPlay
+            muted
+            loop
+            playsInline
+            preload="metadata"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            transition={{ duration: 1.6 }}
+            transition={{ duration: 1.2 }}
             className="absolute inset-0 h-full w-full object-cover"
-            style={{ objectPosition: slides[i].pos }}
           />
         </AnimatePresence>
       </motion.div>
@@ -70,11 +72,11 @@ export function Hero() {
         </Wrap>
       </motion.div>
       <div className="absolute bottom-[88px] right-5 z-10 flex items-center gap-3 text-sm md:right-8" aria-hidden="true">
-        <span className="sr-only">Slide {i + 1} of {slides.length}</span>
-        <span className="sm:not-sr-only">0{i + 1} / 0{slides.length}</span>
-        {slides.map((_, n) => (
+        <span className="sr-only">Slide {i + 1} of {videoSlides.length}</span>
+        <span className="sm:not-sr-only">0{i + 1} / 0{videoSlides.length}</span>
+        {videoSlides.map((_, n) => (
           <span key={n} className="relative h-[2px] w-10 overflow-hidden bg-white/30">
-            {n === i && <motion.span className="absolute inset-0 origin-left bg-white" initial={{ scaleX: 0 }} animate={{ scaleX: 1 }} transition={{ duration: slides[i].duration / 1000, ease: 'linear' }} />}
+            {n === i && <motion.span className="absolute inset-0 origin-left bg-white" initial={{ scaleX: 0 }} animate={{ scaleX: 1 }} transition={{ duration: videoSlides[i].duration / 1000, ease: 'linear' }} />}
           </span>
         ))}
       </div>
@@ -159,6 +161,8 @@ export function HomeServiceCards() {
               alt=""
               loading="lazy"
               decoding="async"
+              width="400"
+              height="300"
               className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105 motion-reduce:transition-none"
             />
           </div>

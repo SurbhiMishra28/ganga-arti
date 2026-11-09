@@ -3,11 +3,17 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <meta name="theme-color" content="#101c26" />
+    
+    <!-- Security Headers (via meta tags) -->
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="referrer" content="strict-origin-when-cross-origin" />
+    <meta name="format-detection" content="telephone=no" />
+    
+    <!-- Core SEO -->
     <title>Ganga Arti Wedding Event | Wedding Ganga Aarti from Kashi, India and overseas</title>
     <meta name="description" content="Wedding Ganga Aarti performed by acharyas and pandits from Kashi, with lamps, flowers and samagri, at your venue anywhere in India and overseas." />
-    <meta name="theme-color" content="#101c26" />
     <meta name="robots" content="index, follow" />
-    <meta name="keywords" content="Ganga Aarti, wedding aarti, Kashi aarti, Hindu wedding rituals, pandit service, Varanasi aarti, destination wedding, spiritual ceremony, Indian wedding" />
     
     <!-- Canonical URL for SEO -->
     <link rel="canonical" href="https://gangaaarti.vercel.app/" />
@@ -17,7 +23,11 @@
     <meta property="og:title" content="Ganga Arti Wedding Event | Wedding Ganga Aarti from Kashi, India and overseas" />
     <meta property="og:description" content="Wedding Ganga Aarti performed by acharyas and pandits from Kashi, with lamps, flowers and samagri, at your venue anywhere in India and overseas." />
     <meta property="og:image" content="https://gangaaarti.vercel.app/pwa-icon-512.png" />
+    <meta property="og:image:width" content="512" />
+    <meta property="og:image:height" content="512" />
+    <meta property="og:image:alt" content="Ganga Arti Wedding Event logo - sacred aarti lamps" />
     <meta property="og:url" content="https://gangaaarti.vercel.app/" />
+    <meta property="og:site_name" content="Ganga Arti Wedding Event" />
     <meta property="og:locale" content="hi_IN" />
     <meta property="og:locale:alternate" content="en_IN" />
     
@@ -26,7 +36,9 @@
     <meta name="twitter:title" content="Ganga Arti Wedding Event" />
     <meta name="twitter:description" content="Wedding Ganga Aarti performed by acharyas and pandits from Kashi, with lamps, flowers and samagri, at your venue anywhere in India and overseas." />
     <meta name="twitter:image" content="https://gangaaarti.vercel.app/pwa-icon-512.png" />
+    <meta name="twitter:image:alt" content="Ganga Arti Wedding Event logo" />
     <meta name="twitter:site" content="@gangaaartieventsorganizer" />
+    <meta name="twitter:creator" content="@gangaaartieventsorganizer" />
     
     <!-- Structured Data / JSON-LD for SEO -->
     <script type="application/ld+json">
@@ -49,28 +61,40 @@
       "priceRange": "₹₹₹",
       "description": "Wedding Ganga Aarti performed by acharyas and pandits from Kashi with traditional lamps, flowers and samagri at your venue anywhere in India and overseas.",
       "serviceType": "Ganga Aarti Wedding Ceremony",
-      "areaServed": ["India", "Abroad"]
+      "areaServed": ["India", "Abroad"],
+      "hasOfferCatalog": {
+        "@type": "OfferCatalog",
+        "name": "Aarti Wedding Services",
+        "itemListElement": [
+          {"@type": "Offer", "itemOffered": {"@type": "Service", "name": "Wedding Ganga Aarti"}},
+          {"@type": "Offer", "itemOffered": {"@type": "Service", "name": "Griha Pravesh Pooja"}},
+          {"@type": "Offer", "itemOffered": {"@type": "Service", "name": "Event Aarti"}}
+        ]
+      }
     }
     </script>
     
     <!-- Performance Optimizations -->
+    <link rel="preload" as="image" href="/pwa-icon-512.png" />
     <link rel="preload" as="image" href="/favicon.png" />
-    <link rel="icon" type="image/png" href="/favicon.png" />
+    <link rel="preload" as="image" href="/assets/stage-DeQNE-hU.jpg" imagesrcset="/assets/stage-DeQNE-hU.jpg" />
+    <link rel="preload" as="image" href="/assets/lamps-CYakvlM7.jpg" />
+    <link rel="preload" as="image" href="/assets/night-DZkDhuyI.jpg" />
+    <link rel="icon" type="image/png" href="/favicon.png" sizes="32x32" />
+    <link rel="icon" type="image/png" href="/pwa-icon-192.png" sizes="192x192" />
     
     <!-- PWA / Service Worker -->
     <link rel="manifest" href="/manifest.json" />
     <meta name="apple-mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
     <meta name="apple-mobile-web-app-title" content="Ganga Arti" />
-    <link rel="apple-touch-icon" href="/pwa-icon-192.png" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/pwa-icon-192.png" />
     
     <!-- DNS Prefetch for external domains -->
     <meta http-equiv="Site-Generation-Control" content="allow" />
     
     <meta name="preconnect" href="https://fonts.googleapis.com" />
     <meta name="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link rel="preconnect" href="https://cdn.skiper-ui.com" crossorigin />
-    <meta name="dns-prefetch" content="https://cdn.skiper-ui.com" />
     <link href="https://fonts.googleapis.com/css2?family=Marcellus&family=Mukta:wght@300;400;600;700&family=Tiro+Devanagari+Hindi&display=swap" rel="stylesheet" />
   </head>
   <body>

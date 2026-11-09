@@ -8,7 +8,6 @@ import portrait from '@media/images/portrait.jpg'
 import diya from '@media/images/diya.jpg'
 import smoke from '@media/images/smoke.jpg'
 import pooja from '@media/images/pooja.jpg'
-import hero3 from '@media/images/hero3.jpg'
 import v1 from '@videos/websitevideo.mp4'
 import v2 from '@videos/webv1.mp4'
 import v3 from '@videos/webv2.mp4'
@@ -26,7 +25,7 @@ import p4 from '@media/posters/v4.jpg'
 import p5 from '@media/posters/v5.jpg'
 
 export { logo }
-export const img = { stage, entry, group, night, lamps, portrait, diya, smoke, pooja, hero3 }
+export const img = { stage, entry, group, night, lamps, portrait, diya, smoke, pooja }
 
 export const alt = {
   stage: 'Pandits raising aarti lamps around the couple on a flower-decked wedding stage',
@@ -38,7 +37,6 @@ export const alt = {
   diya: 'Tiered brass lamps burning along a marble platform',
   smoke: 'A pandit offering incense smoke during the evening aarti',
   pooja: 'Pooja arrangement with kalash, marigold garlands and rangoli',
-  hero3: 'Three pandits in orange attire holding aarti lamps high during a wedding ceremony',
 }
 
 export const videos = [

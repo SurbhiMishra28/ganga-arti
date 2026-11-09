@@ -15,7 +15,7 @@ const linkCls = 'inline-block border-b border-ink/60 pb-0.5 transition-colors du
 const slides = [
   { type: 'image', src: img.night, pos: '50% 30%', duration: 6500 },
   { type: 'image', src: img.stage, pos: '50% 35%', duration: 6500 },
-  { type: 'image', src: img.lamps, pos: '50% 40%', duration: 6500 },
+  { type: 'image', src: img.lamps, pos: '50% 50%', duration: 6500, fit: 'contain' },
 ]
 export function Hero() {
   const ref = useRef(null)
@@ -50,7 +50,7 @@ export function Hero() {
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             transition={{ duration: 1.6 }}
-            className="absolute inset-0 h-full w-full object-cover"
+            className={`absolute inset-0 h-full w-full object-${slides[i].fit || 'cover'}`}
             style={{ objectPosition: slides[i].pos }}
           />
         </AnimatePresence>

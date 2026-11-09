@@ -2,6 +2,7 @@ import React from 'react'
 import { createRoot } from 'react-dom/client'
 import { BrowserRouter, MemoryRouter } from 'react-router-dom'
 import { MotionConfig } from 'framer-motion'
+import { HelmetProvider } from 'react-helmet-async'
 import App from './App.jsx'
 import './index.css'
 
@@ -10,11 +11,13 @@ const Router = __DEMO__ ? MemoryRouter : BrowserRouter
 
 createRoot(document.getElementById('root')).render(
   <React.StrictMode>
-    <Router future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
-      <MotionConfig reducedMotion="user">
-        <App />
-      </MotionConfig>
-    </Router>
+    <HelmetProvider>
+      <Router future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
+        <MotionConfig reducedMotion="user">
+          <App />
+        </MotionConfig>
+      </Router>
+    </HelmetProvider>
   </React.StrictMode>
 )
 

@@ -12,11 +12,10 @@ const linkCls = 'inline-block border-b border-ink/60 pb-0.5 transition-colors du
 
 /* ---------- Hero ---------- */
 // The smallest gallery clip follows the photos to keep autoplay data-light.
-const heroVideo = videos[1]
 const slides = [
   { type: 'image', src: img.night, pos: '50% 30%', duration: 6500 },
   { type: 'image', src: img.stage, pos: '50% 35%', duration: 6500 },
-  { type: 'image', src: img.pooja, pos: '50% 30%', duration: 6500 },
+  { type: 'image', src: img.hero3, pos: '50% 40%', duration: 6500 },
 ]
 export function Hero() {
   const ref = useRef(null)

@@ -21,7 +21,7 @@ const slides = [
 export function Hero() {
   const ref = useRef(null)
   const [i, setI] = useState(0)
-  const [loaded, setLoaded] = useState([true, false])
+  const [loaded, setLoaded] = useState([true, true, true])
 
   useEffect(() => {
     slides.forEach((slide, idx) => {
@@ -33,6 +33,10 @@ export function Hero() {
       }
     })
   }, [])
+
+  const handleError = () => {
+    // Handle load errors silently
+  }
 
   const { scrollYProgress } = useScroll({ target: ref, offset: ['start start', 'end start'] })
   const y = useTransform(scrollYProgress, [0, 1], ['0%', '22%'])
@@ -54,11 +58,12 @@ export function Hero() {
               playsInline
               preload="metadata"
               aria-hidden="true"
+              onError={handleError}
               onTimeUpdate={(event) => {
                 if (event.currentTarget.currentTime >= 10) event.currentTarget.pause()
               }}
               initial={{ opacity: 0, scale: 1.14 }}
-              animate={{ opacity: 1, scale: 1.08 }}
+              animate={{ opacity: loaded[i] ? 1 : 0, scale: loaded[i] ? 1 : 1.14 }}
               exit={{ opacity: 0 }}
               transition={{ opacity: { duration: 1.6 }, scale: { duration: slides[i].duration / 1000, ease: 'easeOut' } }}
               className="absolute inset-0 h-full w-full object-cover"
@@ -168,7 +173,7 @@ export function ServiceList() {
 
 export function HomeServiceCards() {
   return (
-    <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-3">
+    <div className="grid gap-6 grid-cols-1 sm:grid-cols-2 md:grid-cols-3">
       {services.slice(0, 3).map((service) => (
         <Link
           key={service.title}

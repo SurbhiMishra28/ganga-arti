@@ -15,7 +15,7 @@ const linkCls = 'inline-block border-b border-ink/60 pb-0.5 transition-colors du
 const slides = [
   { type: 'image', src: img.night, pos: '50% 30%', duration: 6500 },
   { type: 'image', src: img.stage, pos: '50% 35%', duration: 6500 },
-  { type: 'image', src: img.lamps, pos: '50% 50%', duration: 6500, fit: 'contain' },
+  { type: 'image', src: img.lamps, pos: '50% 50%', duration: 6500, fit: 'cover' },
 ]
 export function Hero() {
   const ref = useRef(null)

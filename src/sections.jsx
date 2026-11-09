@@ -16,7 +16,7 @@ const heroVideo = videos[1]
 const slides = [
   { type: 'image', src: img.night, pos: '50% 30%', duration: 6500 },
   { type: 'image', src: img.stage, pos: '50% 35%', duration: 6500 },
-  { type: 'video', src: heroVideo.src, poster: heroVideo.poster, duration: 10000 },
+  { type: 'image', src: img.pooja, pos: '50% 30%', duration: 6500 },
 ]
 export function Hero() {
   const ref = useRef(null)
@@ -43,36 +43,17 @@ export function Hero() {
     <section ref={ref} className="relative h-[100svh] min-h-[640px] overflow-hidden bg-ink text-white">
       <motion.div style={{ y }} className="absolute inset-x-0 -inset-y-[6%]">
         <AnimatePresence>
-          {slides[i].type === 'video' ? (
-            <motion.video
-              key={i}
-              src={slides[i].src}
-              type="video/mp4"
-              poster={slides[i].poster}
-              autoPlay
-              muted
-              playsInline
-              preload="auto"
-              aria-hidden="true"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              transition={{ duration: 0.5 }}
-              className="absolute inset-0 h-full w-full object-cover"
-            />
-          ) : (
-            <motion.img
-              key={i}
-              src={slides[i].src}
-              alt=""
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              transition={{ duration: 1.6 }}
-              className="absolute inset-0 h-full w-full object-cover"
-              style={{ objectPosition: slides[i].pos }}
-            />
-          )}
+          <motion.img
+            key={i}
+            src={slides[i].src}
+            alt=""
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 1.6 }}
+            className="absolute inset-0 h-full w-full object-cover"
+            style={{ objectPosition: slides[i].pos }}
+          />
         </AnimatePresence>
       </motion.div>
       <div className="absolute inset-0 bg-gradient-to-b from-ink/65 via-ink/15 to-ink/85" />

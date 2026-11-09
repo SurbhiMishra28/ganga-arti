@@ -33,10 +33,6 @@ export function Hero() {
     })
   }, [])
 
-  const handleError = () => {
-    // Handle load errors silently
-  }
-
   const { scrollYProgress } = useScroll({ target: ref, offset: ['start start', 'end start'] })
   const y = useTransform(scrollYProgress, [0, 1], ['0%', '22%'])
   useEffect(() => {
@@ -56,16 +52,12 @@ export function Hero() {
               autoPlay
               muted
               playsInline
-              preload="metadata"
+              preload="auto"
               aria-hidden="true"
-              onError={handleError}
-              onTimeUpdate={(event) => {
-                if (event.currentTarget.currentTime >= 10) event.currentTarget.pause()
-              }}
-              initial={{ opacity: 0, scale: 1.14 }}
-              animate={{ opacity: 1, scale: 1 }}
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
-              transition={{ opacity: { duration: 1.6 }, scale: { duration: slides[i].duration / 1000, ease: 'easeOut' } }}
+              transition={{ duration: 0.5 }}
               className="absolute inset-0 h-full w-full object-cover"
             />
           ) : (

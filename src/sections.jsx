@@ -73,10 +73,10 @@ export function Hero() {
               key={i}
               src={slides[i].src}
               alt=""
-              initial={{ opacity: 0, scale: 1.14 }}
-              animate={{ opacity: 1, scale: 1 }}
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
-              transition={{ opacity: { duration: 1.6 }, scale: { duration: 9, ease: 'easeOut' } }}
+              transition={{ duration: 1.6 }}
               className="absolute inset-0 h-full w-full object-cover"
               style={{ objectPosition: slides[i].pos }}
             />
